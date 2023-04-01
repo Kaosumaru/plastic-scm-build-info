@@ -5,7 +5,9 @@ import {exec as execNonPromise} from 'child_process'
 const execAsync = util.promisify(execNonPromise)
 
 export async function cm(params: string, printOut = true): Promise<string> {
-  console.log(`> cm ${params}`)
+  if (printOut) {
+    console.log(`> cm ${params}`)
+  }
 
   try {
     let exitCode = -1
