@@ -1,0 +1,14 @@
+name: 'plastic-scm-build-info'
+description: 'Action to checkout plastic SCM repo'
+author: 'Mateusz Borycki'
+inputs:
+  repository:
+    required: true
+    description: 'url to the repository'
+  branch:
+    required: false
+    description: 'branch to checkout'
+    default: '/main'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
