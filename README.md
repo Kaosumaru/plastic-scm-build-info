@@ -4,7 +4,7 @@
 
 
 # plastic-scm-build-info-action
-Action that checkouts repo from Plastic SCM, suited for local runners.
+TODO
 WARNING: this action requires cm to be installed on the runner
 
 
