@@ -29,7 +29,7 @@ async function getCheckinsSinceLastBuild(
   currentChangeset: string
 ): Promise<string[]> {
   const result = await cm(
-    `find changeset "where branch = '${branch}' and changesetid > ${lastBuildChangeset} and changesetid <= ${currentChangeset}" --format="{comment}" --nototal`, 
+    `find changeset "where branch = '${branch}' and changesetid > ${lastBuildChangeset} and changesetid <= ${currentChangeset}" --format="{comment}" --nototal`,
     false
   )
   return cmResultToArray(result)
@@ -40,8 +40,8 @@ async function getMergesSinceLastBuild(
   lastBuildChangeset: string,
   currentChangeset: string
 ): Promise<string[]> {
-  const result =  await cm(
-    `find merge "where dstbranch = '${branch}' and dstchangeset > ${lastBuildChangeset} and dstchangeset <= ${currentChangeset}" --format="{srcbranch}" --nototal`, 
+  const result = await cm(
+    `find merge "where dstbranch = '${branch}' and dstchangeset > ${lastBuildChangeset} and dstchangeset <= ${currentChangeset}" --format="{srcbranch}" --nototal`,
     false
   )
   return cmResultToArray(result)
