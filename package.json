@@ -26,9 +26,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "jira-client": "^8.2.2"
   },
   "devDependencies": {
+    "@types/jira-client": "^7.1.6",
     "@types/node": "^16.10.5",
     "@typescript-eslint/parser": "^5.8.1",
     "@vercel/ncc": "^0.31.1",

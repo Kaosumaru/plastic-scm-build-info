@@ -47,7 +47,12 @@ async function getMergesSinceLastBuild(
   return cmResultToArray(result)
 }
 
-export async function info(): Promise<string[]> {
+export interface ChangeLog {
+  checkins: string[]
+  merges: string[]
+}
+
+export async function info(): Promise<ChangeLog> {
   const status = await getStatus()
 
   const branch = status.branch
@@ -66,5 +71,8 @@ export async function info(): Promise<string[]> {
     currentChangeset
   )
 
-  return checkins.concat(merges)
+  return {
+    checkins,
+    merges
+  }
 }
