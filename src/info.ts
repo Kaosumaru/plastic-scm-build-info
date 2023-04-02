@@ -1,49 +1,58 @@
-import {cm, getChangeset} from './plastic'
+import {cm, getStatus} from './plastic'
 
-export async function cmSingleLine(params: string): Promise<string> {
+async function cmSingleLine(params: string): Promise<string> {
   let result = await cm(params, false)
   result = result.replace(/(\r\n|\n|\r)/gm, '')
   return result
 }
 
-export async function getBranchId(branch: string): Promise<string> {
+async function getBranchId(branch: string): Promise<string> {
   return await cmSingleLine(
     `find branches "where name='${branch}'" --format="{id}" --nototal`
   )
 }
 
-export async function getLastBuildChangeset(branch: string): Promise<string> {
+async function getLastBuildChangeset(branch: string): Promise<string> {
   const branchId = await getBranchId(branch)
   return await cmSingleLine(
     `find attributes "where srcobj = ${branchId} and type='last_build'" --format="{value}" --nototal`
   )
 }
 
-export async function getCheckinsSinceLastBuild(
-  branch: string,
-  lastBuildChangeset: string,
-  currentChangeset: string
-): Promise<string> {
-  return await cm(
-    `find changeset "where branch = '${branch}' and changesetid > ${lastBuildChangeset} and changesetid <= ${currentChangeset}" --format="{date} - {comment}" --nototal`, 
-    false
-  )
+function cmResultToArray(result: string): string[] {
+  return result.split('\r\n').filter(n => n)
 }
 
-export async function getMergesSinceLastBuild(
+async function getCheckinsSinceLastBuild(
   branch: string,
   lastBuildChangeset: string,
   currentChangeset: string
-): Promise<string> {
-  return await cm(
+): Promise<string[]> {
+  const result = await cm(
+    `find changeset "where branch = '${branch}' and changesetid > ${lastBuildChangeset} and changesetid <= ${currentChangeset}" --format="{comment}" --nototal`, 
+    false
+  )
+  return cmResultToArray(result)
+}
+
+async function getMergesSinceLastBuild(
+  branch: string,
+  lastBuildChangeset: string,
+  currentChangeset: string
+): Promise<string[]> {
+  const result =  await cm(
     `find merge "where dstbranch = '${branch}' and dstchangeset > ${lastBuildChangeset} and dstchangeset <= ${currentChangeset}" --format="{srcbranch}" --nototal`, 
     false
   )
+  return cmResultToArray(result)
 }
 
-export async function info(branch: string): Promise<string> {
+export async function info(): Promise<string[]> {
+  const status = await getStatus()
+
+  const branch = status.branch
   const lastBuildChangeset = await getLastBuildChangeset(branch)
-  const currentChangeset = await getChangeset()
+  const currentChangeset = status.changesetid
 
   const checkins = await getCheckinsSinceLastBuild(
     branch,
@@ -57,5 +66,5 @@ export async function info(branch: string): Promise<string> {
     currentChangeset
   )
 
-  return checkins + merges
+  return checkins.concat(merges)
 }

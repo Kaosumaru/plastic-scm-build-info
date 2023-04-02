@@ -45,12 +45,25 @@ async function createAnonymousWorkspace(): Promise<void> {
   await cm(`workspace create ${name} .`)
 }
 
-export async function getChangeset(): Promise<string> {
+export interface Status {
+  changesetid: string
+  branch: string
+}
+
+export async function getStatus(): Promise<Status> {
   const status = await cm(`status`, false)
+
+  let changesetid = ''
   const statusRegex = /\(cs:(\d+) - head\)/g
   const matches = statusRegex.exec(status)
-  if (!matches || matches.length < 2) return ''
-  return matches[1]
+  if (matches && matches.length >= 2) changesetid = matches[1]
+
+  let branch = ''
+  const branchRegex = /\/([^@]*)/g
+  const branchMatches = branchRegex.exec(status)
+  if (branchMatches && branchMatches.length >= 2) branch = branchMatches[1]
+
+  return {changesetid, branch}
 }
 
 export async function checkoutRepo(
