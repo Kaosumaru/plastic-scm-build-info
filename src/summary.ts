@@ -2,6 +2,7 @@ import {changesToChangelog} from './changelog'
 import {sendChangelog} from './discord'
 import {info} from './info'
 import JiraApi from 'jira-client'
+import {cm, getStatus} from './plastic'
 
 export interface SummaryConfiguration {
   version: string
@@ -28,7 +29,11 @@ export async function createAndSendChangelog(
     strictSSL: true
   })
 
-  const data = await info()
+  const status = await getStatus()
+  const branch = status.branch
+  const currentChangeset = status.changesetid
+
+  const data = await info(branch, currentChangeset)
   const changelog = await changesToChangelog({
     host: config.jiraHost,
     jira,
@@ -37,5 +42,10 @@ export async function createAndSendChangelog(
     jiraPrefix: config.jiraPrefix
   })
 
-  await sendChangelog(config.version, changelog, config.discordWebhook)
+  if (changelog.entries.length > 0) {
+    await sendChangelog(config.version, changelog, config.discordWebhook)
+  }
+
+  // update last_build attribute on current branch
+  await cm(`att set att:last_build br:/${branch} ${currentChangeset}`, false)
 }

@@ -1,4 +1,4 @@
-import {cm, getStatus} from './plastic'
+import {cm} from './plastic'
 
 async function cmSingleLine(params: string): Promise<string> {
   let result = await cm(params, false)
@@ -52,13 +52,11 @@ export interface InfoData {
   merges: string[]
 }
 
-export async function info(): Promise<InfoData> {
-  const status = await getStatus()
-
-  const branch = status.branch
+export async function info(
+  branch: string,
+  currentChangeset: string
+): Promise<InfoData> {
   const lastBuildChangeset = await getLastBuildChangeset(branch)
-  const currentChangeset = status.changesetid
-
   const checkins = await getCheckinsSinceLastBuild(
     branch,
     lastBuildChangeset,
