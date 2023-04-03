@@ -47,12 +47,12 @@ async function getMergesSinceLastBuild(
   return cmResultToArray(result)
 }
 
-export interface ChangeLog {
+export interface InfoData {
   checkins: string[]
   merges: string[]
 }
 
-export async function info(): Promise<ChangeLog> {
+export async function info(): Promise<InfoData> {
   const status = await getStatus()
 
   const branch = status.branch
