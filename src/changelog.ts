@@ -2,8 +2,9 @@ import JiraApi from 'jira-client'
 import {InfoData} from './info'
 
 export interface ChangelogEntry {
-  url?: string
+  title: string
   description: string
+  url?: string
 }
 
 export interface Changelog {
@@ -20,6 +21,7 @@ async function mergeToChangelogEntry(
 
   if (!matches || matches.length < 2) {
     return {
+      title: 'Merge',
       description
     }
   }
@@ -29,12 +31,13 @@ async function mergeToChangelogEntry(
 
   try {
     const issue = await options.jira.findIssue(issueNumber)
-    description = `${issueNumber} ${issue.fields.summary}`
+    description = issue.fields.summary
     // eslint-disable-next-line no-empty
   } catch {}
 
   return {
     url,
+    title: issueNumber,
     description
   }
 }
@@ -49,6 +52,7 @@ async function checkinToChangelogEntry(
 
   if (!matches || matches.length < 2) {
     return {
+      title: 'Checkin',
       description
     }
   }
@@ -64,6 +68,7 @@ async function checkinToChangelogEntry(
 
   return {
     url,
+    title: issueNumber,
     description
   }
 }

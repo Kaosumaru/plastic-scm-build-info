@@ -1,14 +1,28 @@
 name: 'plastic-scm-build-info'
-description: 'Action to checkout plastic SCM repo'
+description: 'Action to generate changelog for plastic SCM repo'
 author: 'Mateusz Borycki'
 inputs:
-  repository:
+  version:
     required: true
-    description: 'url to the repository'
-  branch:
-    required: false
-    description: 'branch to checkout'
-    default: '/main'
+    description: 'app version'
+  jiraUsername:
+    required: true
+    description: 'jira username'
+  jiraToken:
+    required: true
+    description: 'jira token'
+  jiraHost:
+    required: true
+    description: 'jira host'
+  jiraPrefix:
+    required: true
+    description: 'jira issue prefix'
+  checkinTags:
+    required: true
+    description: 'checkin tags separated by |'
+  discordWebhook:
+    required: true
+    description: 'discord webhook'
 runs:
   using: 'node16'
   main: 'dist/index.js'
