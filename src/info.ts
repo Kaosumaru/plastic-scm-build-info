@@ -57,6 +57,15 @@ export async function info(
   currentChangeset: string
 ): Promise<InfoData> {
   const lastBuildChangeset = await getLastBuildChangeset(branch)
+  // eslint-disable-next-line no-console
+  console.log(`lastBuildChangeset: '${lastBuildChangeset}'`)
+  if (lastBuildChangeset.trim() === '') {
+    return {
+      checkins: [],
+      merges: []
+    }
+  }
+
   const checkins = await getCheckinsSinceLastBuild(
     branch,
     lastBuildChangeset,
