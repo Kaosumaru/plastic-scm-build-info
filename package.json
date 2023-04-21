@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/jira-client": "^7.1.6",
-    "@types/node": "^16.10.5",
+    "@types/node": "^18.15.13",
     "@typescript-eslint/parser": "^5.8.1",
     "@vercel/ncc": "^0.31.1",
     "eslint": "^8.0.1",
