@@ -51,7 +51,7 @@ export interface Status {
 }
 
 export async function getStatus(): Promise<Status> {
-  const status = await cm(`status`, false)
+  const status = await cm(`status`)
 
   let changesetid = ''
   const statusRegex = /\(cs:(\d+) - head\.*\)/g
