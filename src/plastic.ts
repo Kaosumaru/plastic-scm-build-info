@@ -54,7 +54,7 @@ export async function getStatus(): Promise<Status> {
   const status = await cm(`status`)
 
   let changesetid = ''
-  const statusRegex = /\(cs:(\d+) - head\.*\)/g
+  const statusRegex = /\(cs:(\d+) - head.*\)/g
   const matches = statusRegex.exec(status)
   if (matches && matches.length >= 2) changesetid = matches[1]
 
